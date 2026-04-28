@@ -400,7 +400,6 @@ yes
 This removes all resources created by Terraform.
 
 ---
-
 ## Design Summary
 
 This solution provisions Azure infrastructure using Terraform and organizes the code into separate files for provider configuration, resource group, networking, security, virtual machines, variables, and outputs.
