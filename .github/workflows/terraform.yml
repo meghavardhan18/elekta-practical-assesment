@@ -54,7 +54,7 @@ jobs:
     needs: plan
     runs-on: ubuntu-latest
     environment: prod
-    if : github.event_name == 'workflow_dispatch'
+    if : github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply'
     env:
       TF_VAR_password: ${{ secrets.TF_VAR_password }}
       TF_VAR_subscription_id: ${{ secrets.TF_VAR_subscription_id }}
@@ -85,7 +85,7 @@ jobs:
     needs: plan
     runs-on: ubuntu-latest
     environment: prod
-    if: github.event.inputs.action == 'destroy'
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
     env:
       TF_VAR_password: ${{ secrets.TF_VAR_password }}
       TF_VAR_subscription_id: ${{ secrets.TF_VAR_subscription_id }}
