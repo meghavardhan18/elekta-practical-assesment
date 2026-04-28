@@ -5,9 +5,8 @@ on:
   workflow_dispatch:
   
 jobs:
-  terraform:
+  plan:
     runs-on: ubuntu-latest
-    environment: prod
     env:
       TF_VAR_password: ${{ secrets.TF_VAR_password }}
       TF_VAR_subscription_id: ${{ secrets.TF_VAR_subscription_id }}
@@ -41,7 +40,29 @@ jobs:
 
     - name: Terraform Plan
       run: terraform plan -var-file=terraform.tfvars --out=tfplan
-    
+  apply:
+    needs: plan
+    runs-on: ubuntu-latest
+    environment: prod
+    if : github.event_name == 'workflow_dispatch'
+    env:
+      TF_VAR_password: ${{ secrets.TF_VAR_password }}
+      TF_VAR_subscription_id: ${{ secrets.TF_VAR_subscription_id }}
+    defaults:
+      run:
+        working-directory: ./terraform
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.14.9
+    - name: Terraform Init
+      run: terraform init
     - name: Terraform Apply
-      if: github.event_name == 'workflow_dispatch'
       run: terraform apply -auto-approve tfplan
