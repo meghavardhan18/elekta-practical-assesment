@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TF_VAR_password: ${{ secrets.TF_VAR_password }}
+      TF_VAR_subscription_id: ${{ secrets.TF_VAR_subscription_id }}
 
     defaults:
       run:
