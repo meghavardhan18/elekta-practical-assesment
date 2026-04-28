@@ -396,7 +396,6 @@ Confirm by typing:
 ```text
 yes
 ```
-
 This removes all resources created by Terraform.
 
 ---
