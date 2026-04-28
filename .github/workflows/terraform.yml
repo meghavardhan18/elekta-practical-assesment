@@ -2,6 +2,7 @@ name: terraform CI
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
   
 jobs:
   terraform:
@@ -39,3 +40,7 @@ jobs:
 
     - name: Terraform Plan
       run: terraform plan -var-file=terraform.tfvars --out=tfplan
+    
+    - name: Terraform Apply
+      if: github.event_name == 'workflow_dispatch'
+      run: terraform apply -auto-approve tfplan
